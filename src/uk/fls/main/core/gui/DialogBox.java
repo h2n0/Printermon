@@ -21,7 +21,7 @@ public class DialogBox {
 	private SpriteParser font;
 	
 	
-	private final String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789z.'abcdefghijklmnopqrstuvwxyz";
+	private final String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghjklmnopqrstuvwxyz0123456789i.";
 	public DialogBox(int x, int y, String...lines){
 		this.lines = lines;
 		this.pos = new Point(x, y);
@@ -31,7 +31,7 @@ public class DialogBox {
 		this.time = (byte)0;
 		
 		this.gui = new SpriteParser(8, FileIO.instance.readInternalFile("/gui.art"));
-		this.font = new SpriteParser(8, FileIO.instance.readInternalFile("/font.art"));
+		this.font = new SpriteParser(8, FileIO.instance.readInternalFile("/font/font.art"));
 	}
 	
 	public void render(Renderer r){
