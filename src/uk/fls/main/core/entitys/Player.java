@@ -2,6 +2,8 @@ package uk.fls.main.core.entitys;
 
 import fls.engine.main.util.Point;
 import fls.engine.main.util.Renderer;
+import uk.fls.main.core.entitys.printermon.Printermon;
+import uk.fls.main.core.tiles.GrassTile;
 import uk.fls.main.core.tiles.Tile;
 
 public class Player extends Entity{
@@ -21,6 +23,10 @@ public class Player extends Entity{
 			if(!this.justWarped){
 				this.currentTile.interact(this, true);
 				this.justWarped = true;
+			}
+			
+			if(this.currentTile instanceof GrassTile){
+				this.w.battle(new Printermon[]{Printermon.getPrintermonByID(0)}, Printermon.getPrintermonByID(0));
 			}
 		}else{
 			if(!this.currentTile.warpsPlayer()){

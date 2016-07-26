@@ -8,6 +8,7 @@ import fls.engine.main.util.Camera;
 import fls.engine.main.util.Renderer;
 import fls.engine.main.util.rendertools.SpriteParser;
 import uk.fls.main.core.entitys.Player;
+import uk.fls.main.core.entitys.printermon.Printermon;
 import uk.fls.main.core.extras.Transition;
 import uk.fls.main.core.extras.Warp;
 import uk.fls.main.core.gui.DialogBox;
@@ -164,7 +165,10 @@ public class World {
 		this.p.moveAgain();
 	}
 	
-	public void battle(){
-		
+	public void battle(Printermon[] p, Printermon... op){
+		this.transition = true;
+		this.trans = new Transition();
+		this.bat = new Battle(p, op);
+		this.battle = true;
 	}
 }
