@@ -20,6 +20,7 @@ public class World {
 	public Player p;
 	private HashMap<Integer, String[]> dialogs;
 	private HashMap<Integer, Warp> travel;
+	private HashMap<Integer, Integer> mons;
 	private int w,h;
 	private SpriteParser sp;
 	
@@ -28,6 +29,10 @@ public class World {
 	
 	private boolean transition;
 	private Transition trans;
+	
+	private boolean battle;
+	private Battle bat;
+	
 	public World(){
 		LevelGen g = LevelGen.loadLevel("/level.txt");
 		this.w = g.w;
@@ -54,6 +59,9 @@ public class World {
 			if(this.trans.finished()){
 				this.transition = false;
 			}
+		}else if(battle){
+			this.bat.update();
+			
 		}else{
 			int sx = c.pos.getIX()/16;
 			int sy = c.pos.getIY()/16;
@@ -76,6 +84,9 @@ public class World {
 		}else if(this.transition){
 			r.setOffset(0, 0);
 			this.trans.render(r);
+		}else if(this.battle){
+			r.setOffset(0, 0);
+			this.bat.render(r, 0, 0);
 		}else{
 			r.setOffset(-c.pos.getIX(), -c.pos.getIY());
 			// Set offset in renderer
@@ -151,5 +162,9 @@ public class World {
 		this.travel = g.travel;
 		this.p.getPos().setPos(pos.getWarpLoc().getIX() * 16, pos.getWarpLoc().getIY() * 16);
 		this.p.moveAgain();
+	}
+	
+	public void battle(){
+		
 	}
 }

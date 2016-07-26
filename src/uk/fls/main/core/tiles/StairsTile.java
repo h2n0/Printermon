@@ -18,6 +18,7 @@ public class StairsTile extends Tile {
 		super(id);
 		this.up = up;
 		this.canWalkThrough = true;
+		this.warpsPlayer = true;
 	}
 
 	@Override

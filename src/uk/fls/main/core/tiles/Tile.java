@@ -35,6 +35,7 @@ public abstract class Tile {
 	protected final byte id;
 	protected boolean canWalkThrough = false;
 	protected boolean spawnsPrintermon = false;
+	protected boolean warpsPlayer = false;
 	
 	protected int[] frameData;
 	
@@ -64,6 +65,14 @@ public abstract class Tile {
 	
 	public boolean canWalkThrough(){
 		return this.canWalkThrough;
+	}
+	
+	public boolean spawnsPrintermon(){
+		return this.spawnsPrintermon;
+	}
+	
+	public boolean warpsPlayer(){
+		return this.warpsPlayer;
 	}
 	
 	public void interact(Entity e, boolean step){

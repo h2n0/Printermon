@@ -6,6 +6,7 @@ import fls.engine.main.screen.Screen;
 import fls.engine.main.util.Camera;
 import fls.engine.main.util.Renderer;
 import uk.fls.main.core.World;
+import uk.fls.main.core.entitys.printermon.Printermon;
 
 public class GameScreen extends Screen {
 
@@ -23,6 +24,8 @@ public class GameScreen extends Screen {
 			this.cam.wh = 400 * 16;
 			this.w.p.w = this.w;
 			this.loaded = true;
+			Printermon.loadPrintermon();
+			Printermon.getPrintermonByID(0).printValues();
 		}
 	}
 	

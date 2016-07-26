@@ -22,6 +22,8 @@ public abstract class Entity {
 	private final int left = 1;
 	private final int right = 3;
 	
+	private int moveDel = 0;
+	
 	public Entity(int x, int y){
 		this.pos = new Point(x,y);
 		this.targetPos = this.pos;
@@ -33,6 +35,7 @@ public abstract class Entity {
 	
 	protected void move(int dx, int dy) {
 		if(!this.canMove) return;
+		this.moveDel = 0;
 		
 		int nx = (this.pos.getIX()/16) + dx;
 		int ny = (this.pos.getIY()/16) + dy;
@@ -63,7 +66,8 @@ public abstract class Entity {
 	}
 	
 	protected boolean hasMoved(){
-		boolean moving = !this.canMove;
+		if(this.moveDel > 0)this.moveDel--;
+		boolean moving = !this.canMove && this.moveDel == 0;
 		if(moving){
 			float cx = this.pos.x / 16;
 			float cy = this.pos.y / 16;
@@ -99,16 +103,20 @@ public abstract class Entity {
 			}
 			
 			if(this.pos.x == this.targetPos.x * 16 && this.pos.y == this.targetPos.y * 16){
-				this.currentTile = this.w.getTile(this.pos.getIX() / 16, this.pos.getIY() / 16);
+				int px = (this.pos.getIX()+8) / 16;
+				int py = (this.pos.getIY()+8) / 16;
+				this.currentTile = this.w.getTile(px, py);
 				this.canMove = true;
 			}
 			return true;
 		}else{
-			this.currentTile = this.w.getTile(this.pos.getIX() / 16, this.pos.getIY() / 16);
+			int px = (this.pos.getIX()+8) / 16;
+			int py = (this.pos.getIY()+8) / 16;
+			this.currentTile = this.w.getTile(px, py);
 			return false;
 		}
 	}
-	
+		
 	protected void interact(){
 		int xo = 0;
 		int yo = 0;

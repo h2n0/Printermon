@@ -2,8 +2,6 @@ package uk.fls.main.core.entitys;
 
 import fls.engine.main.util.Point;
 import fls.engine.main.util.Renderer;
-import uk.fls.main.core.tiles.DoorMatTile;
-import uk.fls.main.core.tiles.StairsTile;
 import uk.fls.main.core.tiles.Tile;
 
 public class Player extends Entity{
@@ -19,14 +17,15 @@ public class Player extends Entity{
 	}
 
 	public void update() {
-		if(this.interactTime > 0)this.interactTime--;
 		if(!hasMoved()){//Idle things
 			if(!this.justWarped){
 				this.currentTile.interact(this, true);
-			}else{
+				this.justWarped = true;
+			}
+		}else{
+			if(!this.currentTile.warpsPlayer()){
 				this.justWarped = false;
 			}
-			//this.dir = -1;
 		}
 	}
 

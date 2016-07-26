@@ -12,6 +12,7 @@ public class DoorMatTile extends Tile {
 	public DoorMatTile(int i) {
 		super(i);
 		this.canWalkThrough = true;
+		this.warpsPlayer = true;
 	}
 
 	@Override

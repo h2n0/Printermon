@@ -1,0 +1,17 @@
+[1]
+Name:inkiji
+Desc:Very basic Printermon.
+Type:0
+Move:bash,toner splash,paper cut,print jam
+Lvls:0,0,7,10,15
+Evol:16
+Emon:2
+#
+
+[2]
+Name:Lasrij
+Desc:Simple laser Printermon
+Type:1
+Move:bash,beam,reflect,poison gas
+Lvls:0,0,7,16,20
+#
