@@ -21,7 +21,6 @@ public class World {
 	public Player p;
 	private HashMap<Integer, String[]> dialogs;
 	private HashMap<Integer, Warp> travel;
-	private HashMap<Integer, Integer> mons;
 	private int w,h;
 	private SpriteParser sp;
 	
@@ -61,8 +60,18 @@ public class World {
 				this.transition = false;
 			}
 		}else if(battle){
-			this.bat.update();
+			this.bat.update(i);
 			
+			if(this.bat.run()){
+				this.bat = null;
+				this.battle = false;
+			}else if(this.bat.isWin()){
+				this.bat = null;
+				this.battle = false;
+			}else if(this.bat.isLose()){
+				this.bat = null;
+				this.battle = false;
+			}
 		}else{
 			int sx = c.pos.getIX()/16;
 			int sy = c.pos.getIY()/16;
@@ -141,6 +150,10 @@ public class World {
 		this.data[x][y] = (byte)val;
 	}
 	
+	public boolean inBattle(){
+		return this.battle;
+	}
+	
 	public void displayPopup(int id){
 		if(this.popup)return;
 		this.popup = true;
@@ -170,5 +183,15 @@ public class World {
 		this.trans = new Transition();
 		this.bat = new Battle(p, op);
 		this.battle = true;
+	}
+	
+	public void wildBattle(Printermon[] p){
+		if(Math.random() > 0.70){
+			this.transition = true;
+			this.trans = new Transition();
+			Printermon wildOne = Printermon.getPrintermonByID(0);
+			this.bat = new Battle(p, wildOne);
+			this.battle = true;
+		}
 	}
 }

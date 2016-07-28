@@ -86,4 +86,8 @@ public abstract class Tile {
 	protected void travelAtCurrentPos(Entity e){
 		e.w.travel(e.w.getData(e.getPos().getIX()/16, e.getPos().getIY()/16));
 	}
+	
+	public byte getId(){
+		return this.id;
+	}
 }

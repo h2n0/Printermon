@@ -11,6 +11,7 @@ public class Player extends Entity{
 	private boolean canMove;
 	private int interactTime;
 	private boolean justWarped;
+	private boolean justBattled;
 	
 	
 	public Player(int x, int y) {
@@ -19,18 +20,25 @@ public class Player extends Entity{
 	}
 
 	public void update() {
+		if(this.interactTime > 0)this.interactTime --;
 		if(!hasMoved()){//Idle things
 			if(!this.justWarped){
 				this.currentTile.interact(this, true);
 				this.justWarped = true;
 			}
 			
-			if(this.currentTile instanceof GrassTile){
-				this.w.battle(new Printermon[]{Printermon.getPrintermonByID(0)}, Printermon.getPrintermonByID(0));
+			if(this.currentTile instanceof GrassTile && justBattled == false){
+				this.justBattled = true;
+				this.w.wildBattle(new Printermon[]{Printermon.getPrintermonByID(0)});
+				//this.w.battle(new Printermon[]{Printermon.getPrintermonByID(0)}, Printermon.getPrintermonByID(0));
 			}
 		}else{
 			if(!this.currentTile.warpsPlayer()){
 				this.justWarped = false;
+			}
+			
+			if(!this.currentTile.spawnsPrintermon()){
+				this.justBattled = false;
 			}
 		}
 	}

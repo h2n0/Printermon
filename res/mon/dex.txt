@@ -1,4 +1,4 @@
-[1]
+[0]
 Name:inkiji
 Desc:Very basic Printermon.
 Type:0
@@ -8,7 +8,7 @@ Evol:16
 Emon:2
 #
 
-[2]
+[1]
 Name:Lasrij
 Desc:Simple laser Printermon
 Type:1

@@ -104,7 +104,9 @@ public class DialogBox {
 			this.inputDelay--;
 			return;
 		}
-		if(i.isKeyPressed(i.space)){
+		
+		boolean action = i.isKeyPressed(i.space) || i.isKeyPressed(i.z);
+		if(action){
 			this.lineIndex++;
 			if(this.lineIndex >= this.maxLineIndex){
 				this.done = true;

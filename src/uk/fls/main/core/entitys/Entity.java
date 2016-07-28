@@ -22,8 +22,6 @@ public abstract class Entity {
 	private final int left = 1;
 	private final int right = 3;
 	
-	private int moveDel = 0;
-	
 	public Entity(int x, int y){
 		this.pos = new Point(x,y);
 		this.targetPos = this.pos;
@@ -35,7 +33,6 @@ public abstract class Entity {
 	
 	protected void move(int dx, int dy) {
 		if(!this.canMove) return;
-		this.moveDel = 0;
 		
 		int nx = (this.pos.getIX()/16) + dx;
 		int ny = (this.pos.getIY()/16) + dy;
@@ -66,8 +63,7 @@ public abstract class Entity {
 	}
 	
 	protected boolean hasMoved(){
-		if(this.moveDel > 0)this.moveDel--;
-		boolean moving = !this.canMove && this.moveDel == 0;
+		boolean moving = !this.canMove;
 		if(moving){
 			float cx = this.pos.x / 16;
 			float cy = this.pos.y / 16;

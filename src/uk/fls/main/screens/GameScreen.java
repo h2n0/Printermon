@@ -25,7 +25,6 @@ public class GameScreen extends Screen {
 			this.w.p.w = this.w;
 			this.loaded = true;
 			Printermon.loadPrintermon();
-			Printermon.getPrintermonByID(0).printValues();
 		}
 	}
 	
@@ -33,19 +32,28 @@ public class GameScreen extends Screen {
 	public void update() {
 		this.w.update(cam, this.input);
 		
-		if(this.input.isKeyHeld(this.input.w)){
-			this.w.p.moveUp();
-		}else if(this.input.isKeyHeld(this.input.s)){
-			this.w.p.moveDown();
-		}else if(this.input.isKeyHeld(this.input.a)){
-			this.w.p.moveLeft();
-		}else if(this.input.isKeyHeld(this.input.d)){
-			this.w.p.moveRight();
-		}else if(this.input.isKeyPressed(this.input.space)){
-			this.w.p.action();
-		}
 		
+		boolean up = this.input.isKeyHeld(this.input.w) || this.input.isKeyHeld(this.input.up);
+		boolean down = this.input.isKeyHeld(this.input.s) || this.input.isKeyHeld(this.input.down);
+		boolean left = this.input.isKeyHeld(this.input.a) || this.input.isKeyHeld(this.input.left);
+		boolean right = this.input.isKeyHeld(this.input.d) || this.input.isKeyHeld(this.input.right);
+		boolean action = this.input.isKeyHeld(this.input.space) || this.input.isKeyHeld(this.input.z);
+
+		
+		if(!this.w.inBattle()){
+			if(up){
+				this.w.p.moveUp();
+			}else if(down){
+				this.w.p.moveDown();
+			}else if(left){
+				this.w.p.moveLeft();
+			}else if(right){
+				this.w.p.moveRight();
+			}else if(action){
+				this.w.p.action();
+			}
 		this.cam.center(this.w.p.getPos().getIX(), this.w.p.getPos().getIY(), 8, false);
+		}
 	}
 
 	@Override
