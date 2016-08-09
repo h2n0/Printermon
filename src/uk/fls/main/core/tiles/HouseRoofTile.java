@@ -24,6 +24,9 @@ public class HouseRoofTile extends Tile {
 		boolean td = w.getTile(tx, ty + 1) instanceof HouseRoofTile;
 
 		this.otherPart = sp.getData(5, 4);
+		this.frameData = sp.getData(6, 3);
+		
+		draw2By2(r, x, y, frameData);
 
 		if (tl && tr) {
 			this.frameData = sp.getData(5, 3);
@@ -35,7 +38,21 @@ public class HouseRoofTile extends Tile {
 			r.renderSection(this.frameData, x + 8, y, 8);
 			r.renderSection(this.bottomHalf, x, y + 8, 8);
 			r.renderSection(this.bottomHalf, x + 8, y + 8, 8);
-			return;
+		}else if(td && tu){
+			this.bottomHalf = sp.getData(6, 3);
+			this.frameData = sp.getData(5, 3);
+			
+			if(tl){
+				r.renderSection(frameData, x, y, 8);
+				r.renderSection(bottomHalf, x+8, y, 8, r.xFlip);
+				r.renderSection(frameData, x, y+8, 8);
+				r.renderSection(bottomHalf, x+8, y+8, 8, r.xFlip);
+			}else if(tr){
+				r.renderSection(frameData, x+8, y+8, 8);
+				r.renderSection(bottomHalf, x, y+8, 8);
+				r.renderSection(frameData, x+8, y, 8);
+				r.renderSection(bottomHalf, x, y, 8);
+			}
 		} else {
 			if(tl){
 				this.frameData = sp.getData(6, 3);
@@ -53,8 +70,7 @@ public class HouseRoofTile extends Tile {
 					r.renderSection(sp.getData(5, 4), x, y + 8, 8);
 					
 				}
-				return;
-			}else{
+			}else if(tr){
 				this.frameData = sp.getData(6, 3);
 				this.bottomHalf = sp.getData(6, 3);
 				if (!td)this.bottomHalf = sp.getData(6, 4);
@@ -70,7 +86,6 @@ public class HouseRoofTile extends Tile {
 					r.renderSection(sp.getData(5, 4), x + 8, y + 8, 8);
 					
 				}
-				return;
 			}
 		}
 

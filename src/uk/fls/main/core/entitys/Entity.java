@@ -17,10 +17,10 @@ public abstract class Entity {
 	protected byte dir;
 	protected byte pdir;
 	
-	private final int up = 0;
-	private final int down = 2;
-	private final int left = 1;
-	private final int right = 3;
+	protected final int up = 0;
+	protected final int down = 2;
+	protected final int left = 1;
+	protected final int right = 3;
 	
 	public Entity(int x, int y){
 		this.pos = new Point(x,y);
@@ -32,17 +32,10 @@ public abstract class Entity {
 	public abstract void update();
 	
 	protected void move(int dx, int dy) {
+		this.pdir = this.dir;
 		if(!this.canMove) return;
-		
 		int nx = (this.pos.getIX()/16) + dx;
 		int ny = (this.pos.getIY()/16) + dy;
-		if(!this.w.getTile(nx, ny).canWalkThrough()) return;
-		
-		float ntx = nx;
-		float nty = ny;
-		
-		if(ntx < 0)ntx = 0;
-		if(nty < 0)nty = 0;
 		
 		if(dx < 0){
 			this.dir = right;
@@ -56,10 +49,17 @@ public abstract class Entity {
 			this.dir = down;
 		}
 		
+		if(!this.w.getTile(nx, ny).canWalkThrough()) return;
+		
+		float ntx = nx;
+		float nty = ny;
+		
+		if(ntx < 0)ntx = 0;
+		if(nty < 0)nty = 0;
+		
 		
 		canMove = false;
 		this.targetPos = new Point(ntx, nty);
-		this.pdir = this.dir;
 	}
 	
 	protected boolean hasMoved(){
@@ -106,9 +106,7 @@ public abstract class Entity {
 			}
 			return true;
 		}else{
-			int px = (this.pos.getIX()+8) / 16;
-			int py = (this.pos.getIY()+8) / 16;
-			this.currentTile = this.w.getTile(px, py);
+			this.currentTile = this.w.getTile(this.targetPos.getIX(), this.targetPos.getIY());
 			return false;
 		}
 	}
@@ -131,8 +129,6 @@ public abstract class Entity {
 		int py = (int)(Math.ceil(this.pos.y));
 		int tx = (px/16) + xo;
 		int ty = (py/16) + yo;
-		System.out.println(tx + " : " + ty);
-		System.out.println(this.w.getTile(tx, ty));
 		this.w.getTile(tx, ty).interact(this, false);
 	}
 	

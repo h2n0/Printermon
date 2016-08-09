@@ -12,6 +12,7 @@ public class SignTile extends Tile {
 
 	public SignTile(int id) {
 		super(id);
+		this.givesDialog = true;
 	}
 
 	@Override
@@ -34,7 +35,6 @@ public class SignTile extends Tile {
 
 	public void interact(Entity e, boolean step) {
 		if(step)return;
-		System.out.println(d);
 		e.w.displayPopup(d);
 	}
 

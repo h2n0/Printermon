@@ -36,6 +36,7 @@ public abstract class Tile {
 	protected boolean canWalkThrough = false;
 	protected boolean spawnsPrintermon = false;
 	protected boolean warpsPlayer = false;
+	protected boolean givesDialog = false;
 	
 	protected int[] frameData;
 	
@@ -75,6 +76,11 @@ public abstract class Tile {
 		return this.warpsPlayer;
 	}
 	
+
+	public boolean givesDialog(){
+		return this.givesDialog;
+	}
+	
 	public void interact(Entity e, boolean step){
 		
 	}
@@ -86,6 +92,7 @@ public abstract class Tile {
 	protected void travelAtCurrentPos(Entity e){
 		e.w.travel(e.w.getData(e.getPos().getIX()/16, e.getPos().getIY()/16));
 	}
+	
 	
 	public byte getId(){
 		return this.id;

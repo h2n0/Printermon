@@ -9,12 +9,11 @@ public class Move {
 	
 	// Move declaration
 	public static Move[] globalMoves = new Move[255];
-	public static Move bash = new Move(0, "Bash", Type.Normal, 10, 25, none);
+	public static Move bash = new Move(0, "Bash", Type.Ink, 10, 25);
 	
 	public static Move getByName(String name){
 		name = name.trim();
 		name = name.substring(0,1).toUpperCase() + name.substring(1);
-		System.out.println(name);
 		for(int i = 0; i < globalMoves.length; i++){
 			if(globalMoves[i] == null) continue;
 			Move m = globalMoves[i];
@@ -32,6 +31,7 @@ public class Move {
 	private final int maxUses;
 	
 	public Move(int id, String name, Type type, int dmg, int max, byte special){
+		if(globalMoves[id] != null)throw new RuntimeException("Duplicate move id's: " + id);
 		this.id = id;
 		this.name = name;
 		this.type = type;
@@ -40,6 +40,10 @@ public class Move {
 		this.maxUses = max;
 		globalMoves[id] = this;
 		System.out.println(this.name + " added to list of moves!");
+	}
+	
+	public Move(int id, String name, Type type, int dmg, int max){
+		this(id, name, type, dmg, max, none);
 	}
 	
 	public int getDmg(){
@@ -52,6 +56,12 @@ public class Move {
 	
 	public String getName(){
 		return this.name;
+	}
+	
+	public float getDmgMult(int diff){
+		if(diff == 1)return 1.25f;
+		else if(diff == -1)return 0.5f;
+		else return 1f;
 	}
 }
 

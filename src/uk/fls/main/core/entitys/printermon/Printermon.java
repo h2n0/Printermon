@@ -2,6 +2,8 @@ package uk.fls.main.core.entitys.printermon;
 
 import java.util.HashMap;
 
+import javax.print.attribute.standard.RequestingUserName;
+
 import fls.engine.main.io.FileIO;
 
 public class Printermon {
@@ -60,7 +62,7 @@ public class Printermon {
 	}
 	
 	public static Printermon getPrintermonByID(int id){
-		if(id < 0 || id >= maxMon)return null;
+		//if(id < 0 || id >= maxMon)return getPrintermonByID(0);
 		return new Printermon(StatsManager.getByEntryNum(id));
 	}
 	
@@ -84,5 +86,15 @@ public class Printermon {
 		this.stats.health --;
 		if(stats.health < 0)this.stats.health = 0;
 		return this.stats.isAlive();
+	}
+	
+	public Move getRandomMove(){
+		Move res = this.stats.moves[0];
+		for(int i = 0; i < 4; i++){
+			Move nm = this.stats.moves[i];
+			if(nm == null)continue;
+			if(Math.random() > 0.4)return nm;
+		}
+		return res;
 	}
 }

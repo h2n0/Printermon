@@ -15,13 +15,16 @@ public class LevelGen {
 	public HashMap<Integer, Warp> travel;
 	public int w,h;
 	
-	private LevelGen(Tile[][] t, byte[][] d,HashMap<Integer, String[]> con,HashMap<Integer, Warp> tra, int w, int h){
+	public boolean inside;
+	
+	private LevelGen(Tile[][] t, byte[][] d,HashMap<Integer, String[]> con,HashMap<Integer, Warp> tra, int w, int h, boolean inside){
 		this.tiles = t;
 		this.data = d;
 		this.dialogs = con;
 		this.travel = tra;
 		this.w = w;
 		this.h = h;
+		this.inside = inside;
 	}
 	
 	public static LevelGen loadLevel(String name){
@@ -33,7 +36,21 @@ public class LevelGen {
 		int my = 0;
 		
 		
+		boolean inSide = false;
 		boolean inLevel = false;
+		
+		if(!lines[0].startsWith("/")){// Not immediately in level data
+			if(lines[0].startsWith("?")){// An extra bit of data
+				String l = lines[0].substring(1);
+				String[] parts = l.split(":");
+				String k = parts[0].trim();
+				String v = parts[1].trim();
+				if(k.equals("inside")){//Crutial part
+					inSide = Boolean.parseBoolean(v);
+					System.out.println(inSide);
+				}
+			}
+		}
 		for(int i = 0; i < lines.length; i++){
 			if(lines[i].startsWith("#") || lines[i].isEmpty())continue;
 			if(lines[i].startsWith("/")){//Command line
@@ -57,8 +74,6 @@ public class LevelGen {
 			cx = 0;
 		}
 		cy = 0;
-		
-		System.out.println(mx + " : " + my);
 		Tile[][] res = new Tile[mx][my];
 		byte[][] data = new byte[mx][my];
 		for(int i = 0; i < mx; i++){
@@ -177,6 +192,6 @@ public class LevelGen {
 				}
 			}
 		}
-		return new LevelGen(res, data, convos, travel,  mx, my);
+		return new LevelGen(res, data, convos, travel,  mx, my, inSide);
 	}
 }

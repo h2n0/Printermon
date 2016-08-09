@@ -20,10 +20,18 @@ public class Transition {
 	
 	public void render(Renderer r){
 		
-		if(hoz){
+		if(hoz){			
+			int ext = 20;
 			for(int i = 0; i < cw; i++){
 				for(int j = 0; j < r.getHeight(); j++){
 					r.setPixel(i, j, 0);
+				}
+			}
+			for(int i = cw; i < cw + ext; i++){
+				int diff = i - cw;
+				int c = (255/ext) * (ext-diff);
+				for(int j = 0; j < r.getHeight(); j++){
+					r.setPixel(i, j, r.makeRGB(c, c, c));
 				}
 			}
 		}else{

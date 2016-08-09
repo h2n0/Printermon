@@ -17,8 +17,8 @@ public class HouseCornerTile extends Tile {
 		
 		int tx = x / 16;
 		int ty = y / 16;
-		boolean tl = w.getTile(tx - 1, ty) instanceof HouseTile;
-		boolean tr = w.getTile(tx + 1, ty) instanceof HouseTile;
+		boolean tl = w.getTile(tx - 1, ty) instanceof HouseTile || w.getTile(tx - 1, ty) instanceof HouseDoorTile;
+		boolean tr = w.getTile(tx + 1, ty) instanceof HouseTile || w.getTile(tx + 1, ty) instanceof HouseDoorTile;
 		boolean td = w.getTile(tx, ty+1) instanceof HouseCornerTile;
 		boolean tu = w.getTile(tx, ty-1) instanceof HouseCornerTile;
 		

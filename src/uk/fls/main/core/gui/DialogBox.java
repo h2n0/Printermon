@@ -10,6 +10,7 @@ public class DialogBox {
 
 	
 	private String[] lines;
+	private String[] words;
 	private int inputDelay;
 	private int maxLineIndex;
 	
@@ -24,6 +25,13 @@ public class DialogBox {
 	private final String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghjklmnopqrstuvwxyz0123456789i.";
 	public DialogBox(int x, int y, String...lines){
 		this.lines = lines;
+		String allInOne = "";
+		for(int i = 0; i < lines.length; i++){
+			allInOne += lines[i] + " ";
+		}
+		allInOne = allInOne.trim();
+		
+		this.words = allInOne.split(" ");
 		this.pos = new Point(x, y);
 		this.lineIndex = 0;
 		this.inputDelay = 10;
@@ -65,8 +73,8 @@ public class DialogBox {
 		}
 		int yo = 0;
 		int currentLength = 0;
-		for(int i = 0; i < this.lines.length; i++){
-			String word = this.lines[i];
+		for(int i = 0; i < this.words.length; i++){
+			String word = this.words[i];
 			if(currentLength + word.length() >= 17){
 				currentLength = 0;
 				yo ++;
@@ -99,7 +107,6 @@ public class DialogBox {
 	}
 	
 	public void update(Input i){
-		this.time = (byte)((this.time+1) % 64);
 		if(this.inputDelay > 0){
 			this.inputDelay--;
 			return;

@@ -38,7 +38,6 @@ public class StatsManager {
 					line = line.substring(0, line.indexOf("]"));
 					id = line.trim();
 					if(Integer.parseInt(id) == tid){
-						System.out.println(line);
 						isCorrectEntry = true;
 						startLine = i + 1;
 					}
@@ -81,7 +80,8 @@ public class StatsManager {
 			}else if(key.equals("Move")){ // The moves that this printermon can learn.
 				String[] names = value.split(",");
 				for(int j = 0; j < 4; j++){
-					this.moves[j] = Move.getByName(names[j]);
+					Move m = Move.getByName(names[j]);
+					this.moves[j] = m;
 				}
 			}else if(key.equals("Lvls")){ // The levels that the printermon will learn a new move.
 				String[] nums = value.split(",");

@@ -15,3 +15,12 @@ Type:1
 Move:bash,beam,reflect,poison gas
 Lvls:0,0,7,16,20
 #
+
+
+[2]
+Name:Ramon
+Desc:Slow RAM Printermon
+Type:1
+Move:bash,bash,bash,bash
+Lvls:0
+#

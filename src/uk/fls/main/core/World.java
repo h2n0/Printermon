@@ -33,8 +33,10 @@ public class World {
 	private boolean battle;
 	private Battle bat;
 	
+	private boolean outSide;
+	
 	public World(){
-		LevelGen g = LevelGen.loadLevel("/level.txt");
+		LevelGen g = LevelGen.loadLevel("/test.txt");
 		this.w = g.w;
 		this.h =  g.h;
 		this.tiles = g.tiles;
@@ -44,6 +46,16 @@ public class World {
 		this.p = new Player(16,16);
 		this.sp = new SpriteParser(8, FileIO.instance.readInternalFile("/overworld.art"));
 		this.popup = false;
+	}
+	
+	public World(int w, int h){
+		this.sp = new SpriteParser(8, FileIO.instance.readInternalFile("/overworld.art"));
+		setWH(w,h);
+	}
+	
+	public void setWH(int w,int h){
+		this.w = w;
+		this.h = h;
 	}
 
 	public void update(Camera c, Input i){
@@ -186,10 +198,10 @@ public class World {
 	}
 	
 	public void wildBattle(Printermon[] p){
-		if(Math.random() > 0.70){
+		if(Math.random() > 0.1){
 			this.transition = true;
 			this.trans = new Transition();
-			Printermon wildOne = Printermon.getPrintermonByID(0);
+			Printermon wildOne = Printermon.getPrintermonByID(2);
 			this.bat = new Battle(p, wildOne);
 			this.battle = true;
 		}
