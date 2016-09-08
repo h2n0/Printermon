@@ -15,6 +15,9 @@ public class StatsManager {
 	public int evolveId;
 	public int id;
 	
+	public int strength;
+	public int defence;
+	
 	public int health;
 	public int maxHealth;
 	
@@ -110,11 +113,20 @@ public class StatsManager {
 		return this.health > 0;
 	}
 	
+	public int currentLevel(){
+		return this.currentLevel;
+	}
+	
 	private String capitalise(String s){
 		return s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
 	
 	private String getLevel(){
 		return ""+this.currentLevel;
+	}
+	
+	public void setLevel(int level){
+		this.currentLevel = level;
+		this.currentExp = 0;
 	}
 }

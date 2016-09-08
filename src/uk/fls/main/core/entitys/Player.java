@@ -36,6 +36,7 @@ public class Player extends Entity{
 		this.data = sp.getData(0, 0);
 		this.team = new Printermon[6];
 		this.team[0] = Printermon.getPrintermonByID(0);
+		this.team[0].stats.setLevel(5);
 	}
 
 	public void update() {
@@ -54,6 +55,7 @@ public class Player extends Entity{
 			if(this.currentTile instanceof GrassTile && !this.justBattled && !this.justSpawned){
 				this.justBattled = true;
 				this.w.wildBattle(this.team);
+				this.team[0].heal(10000);
 			}
 		}else{
 			if(!this.currentTile.warpsPlayer()){
@@ -126,7 +128,6 @@ public class Player extends Entity{
 	}
 	
 	private void updateSprite(){
-		System.out.println("HUI");
 		if(this.dir == up || this.dir == down){
 			this.data = sp.getData(0,0);
 		}else if(this.dir == left || this.dir == right){

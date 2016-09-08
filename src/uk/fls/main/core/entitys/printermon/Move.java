@@ -9,7 +9,7 @@ public class Move {
 	
 	// Move declaration
 	public static Move[] globalMoves = new Move[255];
-	public static Move bash = new Move(0, "Bash", Type.Ink, 10, 25);
+	public static Move bash = new Move(0, "Bash", Type.Ink, 50, 25);
 	
 	public static Move getByName(String name){
 		name = name.trim();
@@ -59,7 +59,7 @@ public class Move {
 	}
 	
 	public float getDmgMult(int diff){
-		if(diff == 1)return 1.25f;
+		if(diff == 1)return 2f;
 		else if(diff == -1)return 0.5f;
 		else return 1f;
 	}

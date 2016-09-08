@@ -62,6 +62,10 @@ public abstract class Entity {
 		this.targetPos = new Point(ntx, nty);
 	}
 	
+	/**
+	 * 
+	 * @return false if the player isn't moving otherwise will return true
+	 */
 	protected boolean hasMoved(){
 		boolean moving = !this.canMove;
 		if(moving){
@@ -103,6 +107,7 @@ public abstract class Entity {
 				int py = (this.pos.getIY()+8) / 16;
 				this.currentTile = this.w.getTile(px, py);
 				this.canMove = true;
+				return false;
 			}
 			return true;
 		}else{

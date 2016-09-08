@@ -20,4 +20,12 @@ public class Warp {
 	public String getFile(){
 		return this.loc;
 	}
+	
+	public void setPos(Point p){
+		this.pos = p;
+	}
+	
+	public void setFile(String n){
+		this.loc = n;
+	}
 }

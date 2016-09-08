@@ -90,7 +90,10 @@ public abstract class Tile {
 	}
 	
 	protected void travelAtCurrentPos(Entity e){
-		e.w.travel(e.w.getData(e.getPos().getIX()/16, e.getPos().getIY()/16));
+		int x = e.getPos().getIX()/16;
+		int y = e.getPos().getIY()/16;
+		byte b = e.w.getData(x, y);
+		e.w.travel(b);
 	}
 	
 	

@@ -83,9 +83,14 @@ public class Printermon {
 	}
 	
 	public boolean damage(int amt){
-		this.stats.health --;
+		this.stats.health -= amt;
 		if(stats.health < 0)this.stats.health = 0;
 		return this.stats.isAlive();
+	}
+	
+	public void heal(int amt){
+		this.stats.health += amt;
+		if(this.stats.health > this.stats.maxHealth)this.stats.health = this.stats.maxHealth;
 	}
 	
 	public Move getRandomMove(){
@@ -96,5 +101,31 @@ public class Printermon {
 			if(Math.random() > 0.4)return nm;
 		}
 		return res;
+	}
+	
+	public int calculateDmg(Move om, StatsManager opp){
+		/**
+		float levelPart = (2 * this.stats.currentLevel() + 10) / 250;
+		float dod = 4;//this.stats.strength / opp.defence; 
+		
+		int diff = om.getType().getDiffernece(om.getType(), opp.type);
+		float mod = (om.getType()==stats.type?1.5f:1f) * om.getDmgMult(diff);
+		
+		float org = (levelPart * dod * om.getDmg() + 2) * genRandom(mod);
+		return (int)org;**/
+		
+		float levelPart = (2 * this.stats.currentLevel() / 5 + 2);
+		float dod = (10 * om.getDmg() / 10);
+		float STAB = (om.getType()==stats.type?1.5f:1f);
+		
+		
+		float dmg = (((levelPart * dod) / 50) + 2) * STAB * om.getDmgMult(om.getType().getDiffernece(om.getType(), opp.type)) * genRandom(100);
+		return (int)(dmg/2.5f);
+	}
+	
+	private float genRandom(float max){
+		float min = (max/100) * 85;
+		float rand = (float)(min + (Math.random() * (max-min)))/max;
+		return rand;
 	}
 }

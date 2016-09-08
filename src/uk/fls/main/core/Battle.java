@@ -163,14 +163,21 @@ public class Battle {
 				if(getFirstAlive(this.playerPmns) == -1){// All out of usable Prmns, player looses
 					showDialog("Player is out of useable printermon.");
 					this.lose = true;
+				}else{
+					this.playerCurrent = this.playerPmns[getFirstAlive(playerPmns)];
+					this.tm.playerMoved = true;
 				}
 			}
 			
 			if(!this.opponentCurrent.stats.isAlive()){
 				showDialog(this.opponentCurrent.stats.name, "has fainted");
 				if(getFirstAlive(this.opponentPmns) == -1){// All out of usable Prmns, player wins
-					showDialog("Player defeated all of the printermon, well done.");
+					showDialog("Player defeated "+this.opponentCurrent.stats.name);
 					this.win = true;
+				}else{
+					this.opponentCurrent = this.opponentPmns[getFirstAlive(opponentPmns)];
+					this.tm.opponentMoved = true;
+					showDialog("Opponent sent out " + this.opponentCurrent.stats.name);
 				}
 			}
 	
@@ -202,6 +209,7 @@ public class Battle {
 				this.tm.opponentResting();
 				
 				if(!this.opponentCurrent.stats.isAlive())return;
+				if(!this.playerCurrent.stats.isAlive())return;
 				
 				if(!this.tm.playerMoved){
 					Move m = this.playerCurrent.stats.moves[this.currentOption];
@@ -213,7 +221,7 @@ public class Battle {
 					
 					int diff = m.getType().getDiffernece(m.getType(), this.opponentCurrent.stats.type);
 					if(!this.tm.playerAttackUsed && !this.tm.playerActive){
-						int dmg = (int)(m.getDmg() * m.getDmgMult(diff));
+						int dmg = this.opponentCurrent.calculateDmg(m, this.opponentCurrent.stats);
 						this.opponentCurrent.damage(dmg);
 						this.tm.playerAttackUsed = true;
 						this.tm.playerMoving();
@@ -238,7 +246,7 @@ public class Battle {
 
 					int diff = om.getType().getDiffernece(om.getType(), this.playerCurrent.stats.type);
 					if(!this.tm.opponentAttackUsed && !this.tm.opponentActive){
-						int dmg = (int)(om.getDmg() * om.getDmgMult(diff));
+						int dmg = this.opponentCurrent.calculateDmg(om, this.playerCurrent.stats);
 						this.playerCurrent.damage(dmg);
 						this.tm.opponentAttackUsed = true;
 						this.tm.opponentMoving();
@@ -347,7 +355,11 @@ public class Battle {
 	}
 	
 	public void showDialog(String... lines){
-		this.db = new DialogBox(8, 8 * 14 + 4, lines);
+		if(this.db != null){
+			this.db.addMoreDialog(lines);
+		}else{
+			this.db = new DialogBox(8, 8 * 14 + 4, lines);
+		}
 	}
 
 	private void setOptions(String o1, String o2, String o3, String o4) {
@@ -391,7 +403,9 @@ public class Battle {
 					i == barLength - 1 ? r.xFlip : (byte) 0);
 		}
 		
-		renderString(r, this.playerCurrent.getName(), 8 * 19 - (this.playerCurrent.getName().length() * 8), 8 * 9);
+		renderString(r, this.playerCurrent.getName(), 8 * 19 - (this.playerCurrent.getName().length() * 8), 8 * 8);
+		String lvl = "Lvl "+this.playerCurrent.stats.currentLevel();
+		renderString(r, lvl, 8*9 + ((9-lvl.length())/2)*8, 8 * 9);
 	}
 	
 	private void renderOpponentSide(Renderer r){
@@ -424,6 +438,8 @@ public class Battle {
 			r.renderSection(gui.getData(dx, 0), 8 + (i * 8), 16 + 8, 8, i == barLength - 1 ? r.xFlip : (byte) 0);
 		}	
 		
-		renderString(r, this.opponentCurrent.getName(), 8, 8);
+		renderString(r, this.opponentCurrent.getName(), 8, 0);
+		String lvl = "Lvl "+this.opponentCurrent.stats.currentLevel();
+		renderString(r, lvl, 8 + ((9-lvl.length())/2)*8, 8);
 	}
 }

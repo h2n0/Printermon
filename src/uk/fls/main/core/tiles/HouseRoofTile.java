@@ -39,7 +39,7 @@ public class HouseRoofTile extends Tile {
 			r.renderSection(this.bottomHalf, x, y + 8, 8);
 			r.renderSection(this.bottomHalf, x + 8, y + 8, 8);
 		}else if(td && tu){
-			this.bottomHalf = sp.getData(6, 3);
+			this.bottomHalf = sp.getData(6, 4);
 			this.frameData = sp.getData(5, 3);
 			
 			if(tl){
@@ -53,7 +53,20 @@ public class HouseRoofTile extends Tile {
 				r.renderSection(frameData, x+8, y, 8);
 				r.renderSection(bottomHalf, x, y, 8);
 			}
-		} else {
+		} else if(!tu && !td){
+				if(!tl){
+					r.renderSection(sp.getData(6, 2), x, y, 8);
+					r.renderSection(sp.getData(5, 2), x + 8, y, 8);
+					r.renderSection(sp.getData(6, 4), x, y + 8, 8);
+					r.renderSection(sp.getData(5, 4), x + 8, y + 8, 8);
+				}else if(!tr){
+
+					r.renderSection(sp.getData(6, 2), x+8, y, 8, r.xFlip);
+					r.renderSection(sp.getData(5, 2), x, y, 8);
+					r.renderSection(sp.getData(6, 4), x + 8, y + 8, 8, r.xFlip);
+					r.renderSection(sp.getData(5, 4), x, y + 8, 8);
+				}
+		}else {
 			if(tl){
 				this.frameData = sp.getData(6, 3);
 				this.bottomHalf = sp.getData(6, 3);

@@ -9,7 +9,7 @@ public class Start extends Init{
 
 	public static int w = 160;
 	public static int h = 144;
-	public static int s = 2;
+	public static int s = 3;
 	
 	public Start(){
 		super("Printermon prototype", w * s, h * s);

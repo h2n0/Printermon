@@ -12,6 +12,7 @@ public class HouseDoorTile extends Tile {
 	public HouseDoorTile(int id) {
 		super(id);
 		this.canWalkThrough = true;
+		this.warpsPlayer = true;
 	}
 
 	@Override

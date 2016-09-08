@@ -5,12 +5,14 @@ import fls.engine.main.io.FileIO;
 import fls.engine.main.util.Point;
 import fls.engine.main.util.Renderer;
 import fls.engine.main.util.rendertools.SpriteParser;
+import uk.fls.main.core.extras.ReverseStack;
 
 public class DialogBox {
 
 	
 	private String[] lines;
 	private String[] words;
+	private ReverseStack moreLines; 
 	private int inputDelay;
 	private int maxLineIndex;
 	
@@ -40,6 +42,8 @@ public class DialogBox {
 		
 		this.gui = new SpriteParser(8, FileIO.instance.readInternalFile("/gui.art"));
 		this.font = new SpriteParser(8, FileIO.instance.readInternalFile("/font/font.art"));
+		
+		this.moreLines = new ReverseStack();
 	}
 	
 	public void render(Renderer r){
@@ -116,7 +120,7 @@ public class DialogBox {
 		if(action){
 			this.lineIndex++;
 			if(this.lineIndex >= this.maxLineIndex){
-				this.done = true;
+				this.done = !nextLine();
 			}
 			this.inputDelay = 10;
 		}
@@ -124,5 +128,27 @@ public class DialogBox {
 	
 	public boolean finished(){
 		return this.done;
+	}
+	
+	public void addMoreDialog(String...lines){
+		this.moreLines.push(lines);
+	}
+	
+	private boolean nextLine(){
+		if(this.moreLines.peek() == null)return false;
+		else{
+			this.lines = this.moreLines.pop();
+			String allInOne = "";
+			for(int i = 0; i < lines.length; i++){
+				allInOne += lines[i] + " ";
+			}
+			allInOne = allInOne.trim();
+			
+			this.words = allInOne.split(" ");
+			
+			this.lineIndex = 0;
+			this.maxLineIndex = -1;
+		}
+		return true;
 	}
 }

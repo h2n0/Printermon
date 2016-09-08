@@ -9,6 +9,7 @@ import fls.engine.main.util.Renderer;
 import fls.engine.main.util.rendertools.SpriteParser;
 import uk.fls.main.core.entitys.Player;
 import uk.fls.main.core.entitys.printermon.Printermon;
+import uk.fls.main.core.extras.LevelRange;
 import uk.fls.main.core.extras.Transition;
 import uk.fls.main.core.extras.Warp;
 import uk.fls.main.core.gui.DialogBox;
@@ -20,23 +21,26 @@ public class World {
 	public byte[][] data;
 	public Player p;
 	private HashMap<Integer, String[]> dialogs;
-	private HashMap<Integer, Warp> travel;
+	public HashMap<Integer, Warp> travel;
 	private int w,h;
 	private SpriteParser sp;
+	private String lastSafeSpace;
 	
 	private boolean popup;
 	private DialogBox currentPopup;
-	
 	private boolean transition;
 	private Transition trans;
-	
 	private boolean battle;
 	private Battle bat;
-	
+	private boolean fainted;
 	private boolean outSide;
+	private float encounterRate;
+	
+	private int[] monsters;
+	private LevelRange lvlRange;
 	
 	public World(){
-		LevelGen g = LevelGen.loadLevel("/test.txt");
+		LevelGen g = LevelGen.loadLevel("/room1.txt");
 		this.w = g.w;
 		this.h =  g.h;
 		this.tiles = g.tiles;
@@ -46,6 +50,7 @@ public class World {
 		this.p = new Player(16,16);
 		this.sp = new SpriteParser(8, FileIO.instance.readInternalFile("/overworld.art"));
 		this.popup = false;
+		this.setEncouterRate(20f);
 	}
 	
 	public World(int w, int h){
@@ -65,6 +70,11 @@ public class World {
 			if(this.currentPopup.finished()){
 				this.popup = false;
 				this.currentPopup = null;
+			}
+		}else if(this.fainted){
+			if(i.isKeyPressed(i.z) || i.isKeyPressed(i.x) || i.isKeyPressed(i.space)){
+				travel(lastSafeSpace);
+				this.fainted = false;
 			}
 		}else if(this.transition){
 			this.trans.update();
@@ -103,6 +113,10 @@ public class World {
 		if(this.popup){
 			r.setOffset(0, 0);
 			this.currentPopup.render(r);
+		}else if(this.fainted){
+			r.fill(0);
+			r.setOffset(0, 0);
+			renderFaintedSpeech();
 		}else if(this.transition){
 			r.setOffset(0, 0);
 			this.trans.render(r);
@@ -180,14 +194,29 @@ public class World {
 		this.transition = true;
 		this.trans = new Transition();
 		LevelGen g = LevelGen.loadLevel(pos.getFile());
-		this.w = g.w;
-		this.h =  g.h;
-		this.tiles = g.tiles;
-		this.data = g.data;
-		this.dialogs = g.dialogs;
-		this.travel = g.travel;
+		setWorldParams(g);
 		this.p.getPos().setPos(pos.getWarpLoc().getIX() * 16, pos.getWarpLoc().getIY() * 16);
 		this.p.moveAgain();
+		
+		if(g.safe){
+			this.lastSafeSpace = pos.getFile();
+		}
+	}
+	
+	private void travel(String place){
+		Warp pos = null;
+		for(int i = 0; i < this.travel.keySet().toArray().length; i++){
+			int k = (int)this.travel.keySet().toArray()[i];
+			Warp w = this.travel.get(k);
+			if(w.getFile() == place){
+				pos = w;
+				break;
+			}
+		}
+		if(pos == null)throw new IllegalStateException("Unable to warp to safe space: " + place);
+		LevelGen g = LevelGen.loadLevel(lastSafeSpace);
+		setWorldParams(g);
+		this.p.getPos().setPos(pos.getWarpLoc().getIX() * 16, pos.getWarpLoc().getIY() * 16);
 	}
 	
 	public void battle(Printermon[] p, Printermon... op){
@@ -198,12 +227,44 @@ public class World {
 	}
 	
 	public void wildBattle(Printermon[] p){
-		if(Math.random() > 0.1){
+		if(!outSide)return;
+		if(Math.random() <= this.encounterRate){
 			this.transition = true;
 			this.trans = new Transition();
-			Printermon wildOne = Printermon.getPrintermonByID(2);
-			this.bat = new Battle(p, wildOne);
+			this.bat = new Battle(p, getPrintermonFromArea());
 			this.battle = true;
 		}
+	}
+	
+	public void setWorldParams(int w, int h, Tile[][] tiles, byte[][] data, HashMap<Integer, String[]> dialog, HashMap<Integer, Warp> travel){
+		this.w = w;
+		this.h = h;
+		this.tiles = tiles;
+		this.data  = data;
+		this.dialogs = dialog;
+		this.travel = travel;
+	}
+	
+	public void setWorldParams(LevelGen g){
+		this.setWorldParams(g.w, g.h, g.tiles, g.data, g.dialogs, g.travel);
+		this.outSide = !g.inside;
+		this.monsters = g.monsters;
+		this.lvlRange = g.levelRange;
+	}
+	
+	public void setEncouterRate(float chance){
+		this.encounterRate = chance / 187.5f;
+	}
+	
+	private void renderFaintedSpeech(){
+		
+	}
+	
+	private Printermon getPrintermonFromArea(){
+		Printermon wildOne = Printermon.getPrintermonByID(this.monsters[(int)System.currentTimeMillis() % this.monsters.length]);
+		float lvl = uk.fls.main.core.extras.Util.getRandom(this.lvlRange.getMin(), this.lvlRange.getMax());
+		System.out.println(lvl);
+		wildOne.stats.setLevel((int)lvl);
+		return wildOne;
 	}
 }

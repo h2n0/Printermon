@@ -1,0 +1,7 @@
+Finish battles [ ]
+ - Correct Dmg [X]
+ - Check if more than one monster will work (Trainer test)[X]
+ - Apply fainted state [ ]
+ - Variable levels [X]
+ 
+Add more towns and things [ ]
